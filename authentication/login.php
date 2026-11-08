@@ -53,233 +53,239 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- Vendor CSS Files -->
     <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="../assets/css/design-system.css" rel="stylesheet">
     <link href="../assets/css/main.css" rel="stylesheet">
     
     <!-- Custom CSS -->
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: linear-gradient(135deg, #eef3f0 0%, #d5e0d8 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 16px;
         }
         
         .login-container {
-            background: white;
+            background: #ffffff;
             border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 35px rgba(27, 43, 34, 0.12);
             overflow: hidden;
             max-width: 900px;
             width: 100%;
             display: flex;
-            min-height: 500px;
+            min-height: 520px;
+            border: 1px solid var(--av-border, #d5e0d8);
         }
         
         .login-image {
             flex: 1;
-            background: linear-gradient(135deg, #4CAF50, #45a049);
+            background: linear-gradient(135deg, #1b5e20, #1e4356);
             display: flex;
             align-items: center;
             justify-content: center;
             flex-direction: column;
-            color: white;
+            color: #ffffff;
             padding: 40px;
             position: relative;
         }
         
-        .login-image::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('../assets/img/logo.png') center/100px no-repeat;
-            opacity: 0.1;
-        }
-        
         .login-image h2 {
-            font-size: 2.5rem;
+            font-size: clamp(1.75rem, 1.4rem + 1.5vw, 2.4rem);
             font-weight: 700;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             text-align: center;
+            color: #ffffff;
         }
         
         .login-image p {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             text-align: center;
-            opacity: 0.9;
+            color: rgba(255, 255, 255, 0.92);
+            margin-bottom: 12px;
         }
         
         .login-form {
             flex: 1;
-            padding: 60px 40px;
+            padding: 48px 40px;
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
         
         .form-title {
-            font-size: 2rem;
-            font-weight: 600;
-            color: #2c5530;
-            margin-bottom: 10px;
+            font-size: clamp(1.5rem, 1.3rem + 0.8vw, 2rem);
+            font-weight: 700;
+            color: #1e4356;
+            margin-bottom: 8px;
             text-align: center;
         }
         
         .form-subtitle {
-            color: #666;
+            color: #4a5950;
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 28px;
         }
         
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 20px;
+        }
+
+        .input-with-icon {
             position: relative;
         }
         
         .form-control {
             width: 100%;
-            padding: 15px 20px 15px 50px;
-            border: 2px solid #e9ecef;
+            padding: 12px 16px 12px 46px;
+            border: 2px solid #cbd5ce;
             border-radius: 10px;
             font-size: 16px;
-            transition: all 0.3s;
-            background: #f8f9fa;
+            transition: all 0.25s ease;
+            background: #ffffff;
+            color: #1f2923;
         }
         
         .form-control:focus {
-            outline: none;
-            border-color: #4CAF50;
-            background: white;
-            box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
+            border-color: #1b5e20;
+            background: #ffffff;
         }
         
         .form-icon {
             position: absolute;
-            left: 18px;
+            left: 16px;
             top: 50%;
             transform: translateY(-50%);
-            color: #4CAF50;
+            color: #1b5e20;
             font-size: 18px;
+            pointer-events: none;
         }
         
         .btn-login {
-            background: linear-gradient(135deg, #4CAF50, #45a049);
-            color: white;
+            background: #1b5e20;
+            color: #ffffff;
             border: none;
-            padding: 15px 40px;
+            padding: 14px 32px;
             border-radius: 10px;
             font-weight: 600;
             font-size: 16px;
             width: 100%;
-            transition: all 0.3s;
-            margin-top: 20px;
+            transition: all 0.25s ease;
+            margin-top: 12px;
         }
         
-        .btn-login:hover {
-            background: linear-gradient(135deg, #45a049, #3d8b40);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
-        }
-        
-        .error-message {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 12px 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border: 1px solid #f5c6cb;
+        .btn-login:hover,
+        .btn-login:focus-visible {
+            background: #144718;
+            color: #ffffff;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(27, 94, 32, 0.25);
         }
         
         .back-link {
             text-align: center;
-            margin-top: 30px;
+            margin-top: 24px;
         }
         
         .back-link a {
-            color: #4CAF50;
+            color: #1b5e20;
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            min-height: 44px;
         }
         
         .back-link a:hover {
-            color: #45a049;
+            color: #144718;
+            text-decoration: underline;
         }
         
-        @media (max-width: 768px) {
+        @media (max-width: 767.98px) {
             .login-container {
                 flex-direction: column;
-                margin: 20px;
             }
             
             .login-image {
-                padding: 30px 20px;
+                padding: 28px 20px;
             }
             
             .login-form {
-                padding: 40px 30px;
+                padding: 32px 20px;
             }
         }
     </style>
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <div class="login-container">
-        <!-- Login Image/Branding Side -->
-        <div class="login-image">
-            <h2>Agro Vista</h2>
-            <p>Welcome to the Agricultural E-Commerce Administration Panel</p>
-            <p>Manage products, sellers, and marketplace content efficiently</p>
-        </div>
+    <main id="main-content" class="w-100 d-flex justify-content-center">
+        <div class="login-container">
+            <!-- Login Image/Branding Side -->
+            <div class="login-image">
+                <h2>Agro Vista</h2>
+                <p>Welcome to the Agricultural E-Commerce Administration Panel</p>
+                <p class="mb-0">Manage products, sellers, and marketplace content efficiently</p>
+            </div>
 
-        <!-- Login Form Side -->
-        <div class="login-form">
-            <h2 class="form-title">Admin Login</h2>
-            <p class="form-subtitle">Please sign in to access the dashboard</p>
-            
-            <?php if (isset($error)) { ?>
-                <div class="error-message">
-                    <i class="bi bi-exclamation-triangle"></i> <?php echo $error; ?>
-                </div>
-            <?php } ?>
-            
-            <?php if (isset($_GET['success']) && $_GET['success'] == 'registered') { ?>
-                <div class="success-message" style="background: #d4edda; color: #155724; padding: 12px 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #c3e6cb;">
-                    <i class="bi bi-check-circle"></i> Registration successful! You can now login.
-                </div>
-            <?php } ?>
-            
-            <form method="POST">
-                <div class="form-group">
-                    <i class="bi bi-envelope form-icon"></i>
-                    <input type="email" name="your_name" id="your_name" class="form-control" 
-                           placeholder="Enter your email address" required />
-                </div>
+            <!-- Login Form Side -->
+            <div class="login-form">
+                <h1 class="form-title">Admin Login</h1>
+                <p class="form-subtitle">Please sign in to access the dashboard</p>
                 
-                <div class="form-group">
-                    <i class="bi bi-lock form-icon"></i>
-                    <input type="password" name="your_pass" id="your_pass" class="form-control" 
-                           placeholder="Enter your password" required />
-                </div>
+                <?php if (isset($error)) { ?>
+                    <div class="error-message av-alert av-alert-danger" role="alert" aria-live="assertive">
+                        <i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>
+                        <span><?php echo htmlspecialchars($error); ?></span>
+                    </div>
+                <?php } ?>
                 
-                <button type="submit" name="signin" class="btn-login">
-                    <i class="bi bi-box-arrow-in-right"></i> Sign In
-                </button>
-            </form>
-            
-            <div class="back-link">
-                <a href="../shared/index.php">
-                    <i class="bi bi-arrow-left"></i> Back to Main Site
-                </a>
+                <?php if (isset($_GET['success']) && $_GET['success'] == 'registered') { ?>
+                    <div class="success-message av-alert av-alert-success" role="status" aria-live="polite">
+                        <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
+                        <span>Registration successful! You can now sign in.</span>
+                    </div>
+                <?php } ?>
+                
+                <form method="POST" action="">
+                    <div class="form-group">
+                        <label for="your_name" class="form-label">Email Address</label>
+                        <div class="input-with-icon">
+                            <i class="bi bi-envelope form-icon" aria-hidden="true"></i>
+                            <input type="email" name="your_name" id="your_name" class="form-control" 
+                                   placeholder="you@example.com" autocomplete="email" required />
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="your_pass" class="form-label">Password</label>
+                        <div class="input-with-icon">
+                            <i class="bi bi-lock form-icon" aria-hidden="true"></i>
+                            <input type="password" name="your_pass" id="your_pass" class="form-control" 
+                                   placeholder="Enter your password" autocomplete="current-password" required />
+                        </div>
+                    </div>
+                    
+                    <button type="submit" name="signin" class="btn-login" data-loading-text="Signing in...">
+                        <i class="bi bi-box-arrow-in-right" aria-hidden="true"></i> Sign In
+                    </button>
+                </form>
+                
+                <div class="back-link">
+                    <a href="../shared/index.php">
+                        <i class="bi bi-arrow-left" aria-hidden="true"></i> Back to Main Site
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
+    </main>
 
-    <!-- Vendor JS Files -->
+    <!-- Vendor & Main JS Files -->
     <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/main.js"></script>
 
 </body>
 </html>

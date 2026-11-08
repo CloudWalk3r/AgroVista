@@ -7,7 +7,8 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] != 'admin') {
 include '../db/DBcon.php';
 
 if (isset($_GET['seller_id'])) { 
-    $seller_id = $_GET['seller_id']; 
+    // Cast to int to prevent SQL injection (seller_id is an integer column)
+    $seller_id = (int) $_GET['seller_id']; 
     $user_id = $_SESSION['user_id'];
     
     // Delete related products first (if any)

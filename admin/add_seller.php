@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: dashboard_admin.php?success=Added_Seller");
         exit;
     } else {
-        echo "Error: " . $conn->error;
+        $error_message = "Error: " . $conn->error;
     }
 }
 ?>
@@ -44,39 +44,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
     <link href="../assets/vendor/aos/aos.css" rel="stylesheet">
     
-    <!-- Main CSS File -->
+    <!-- Main & Design System CSS Files -->
+    <link href="../assets/css/design-system.css" rel="stylesheet">
     <link href="../assets/css/main.css" rel="stylesheet">
     
     <!-- Custom CSS -->
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background: #f8f9fa;
+            background: var(--av-bg, #f6f9f7);
         }
         
         .form-container {
             max-width: 800px;
-            margin: 40px auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin: 32px auto 48px auto;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: var(--av-shadow-md);
+            border: 1px solid var(--av-border, #d5e0d8);
             overflow: hidden;
         }
         
         .form-header {
-            background: linear-gradient(135deg, #4CAF50, #45a049);
-            color: white;
-            padding: 30px;
+            background: linear-gradient(135deg, #1b5e20, #1e4356);
+            color: #ffffff;
+            padding: 28px 24px;
             text-align: center;
+        }
+
+        .form-header h1 {
+            color: #ffffff;
+            font-size: var(--av-text-2xl);
+            font-weight: 700;
+            margin-bottom: 6px;
         }
         
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 22px;
         }
         
         .form-label {
             font-weight: 600;
-            color: #2c5530;
+            color: #1f2923;
             margin-bottom: 8px;
             display: flex;
             align-items: center;
@@ -84,36 +93,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         .form-label i {
             margin-right: 8px;
-            color: #4CAF50;
-        }
-        
-        .form-control {
-            border: 2px solid #e9ecef;
-            border-radius: 10px;
-            padding: 12px 15px;
-            transition: all 0.3s;
-        }
-        
-        .form-control:focus {
-            border-color: #4CAF50;
-            box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
+            color: #1b5e20;
         }
         
         .btn-submit {
-            background: linear-gradient(135deg, #4CAF50, #45a049);
-            color: white;
+            background: #1b5e20;
+            color: #ffffff;
             border: none;
-            padding: 15px 40px;
-            border-radius: 25px;
+            padding: 14px 36px;
+            border-radius: 999px;
             font-weight: 600;
             width: 100%;
-            transition: all 0.3s;
+            transition: all 0.25s ease;
         }
         
-        .btn-submit:hover {
-            background: linear-gradient(135deg, #45a049, #3d8b40);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        .btn-submit:hover,
+        .btn-submit:focus-visible {
+            background: #144718;
+            color: #ffffff;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(27, 94, 32, 0.25);
         }
     </style>
 </head>
@@ -121,49 +120,56 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <?php include 'admin_header.php'; ?>
 
-    <main class="main">
+    <main id="main-content" class="main">
         <div class="container">
             <div class="form-container" data-aos="fade-up">
                 <div class="form-header">
-                    <h2><i class="bi bi-person-plus"></i> Add New Seller</h2>
+                    <h1><i class="bi bi-person-plus me-2" aria-hidden="true"></i>Add New Seller</h1>
                     <p class="mb-0">Register a new seller to the marketplace</p>
                 </div>
                 
                 <div class="form-body p-4">
-                    <form method="POST">
+                    <?php if (isset($error_message)): ?>
+                        <div class="alert alert-danger" role="alert" aria-live="assertive">
+                            <i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>
+                            <span><?php echo htmlspecialchars($error_message); ?></span>
+                        </div>
+                    <?php endif; ?>
+
+                    <form method="POST" action="">
                         <div class="form-group">
                             <label for="name" class="form-label">
-                                <i class="bi bi-person"></i> Seller Name
+                                <i class="bi bi-person" aria-hidden="true"></i> Seller Name
                             </label>
                             <input type="text" name="name" id="name" class="form-control" 
-                                   placeholder="Enter seller's full name" required />
+                                   placeholder="Enter seller's full name" autocomplete="name" required />
                         </div>
                         
                         <div class="form-group">
                             <label for="phone" class="form-label">
-                                <i class="bi bi-telephone"></i> Phone Number
+                                <i class="bi bi-telephone" aria-hidden="true"></i> Phone Number
                             </label>
                             <input type="tel" name="phone" id="phone" class="form-control" 
-                                   placeholder="Enter phone number" required />
+                                   placeholder="e.g., +94 71 234 5678" autocomplete="tel" required />
                         </div>
                         
                         <div class="form-group">
                             <label for="address" class="form-label">
-                                <i class="bi bi-geo-alt"></i> Address
+                                <i class="bi bi-geo-alt" aria-hidden="true"></i> Address
                             </label>
                             <textarea name="address" id="address" class="form-control" rows="3"
-                                      placeholder="Enter complete address" required></textarea>
+                                      placeholder="Enter complete business or farm address" autocomplete="street-address" required></textarea>
                         </div>
                         
                         <div class="form-group">
-                            <button type="submit" class="btn btn-submit">
-                                <i class="bi bi-check-circle"></i> Add Seller
+                            <button type="submit" class="btn btn-submit" data-loading-text="Adding Seller...">
+                                <i class="bi bi-check-circle" aria-hidden="true"></i> Add Seller
                             </button>
                         </div>
                         
                         <div class="text-center mt-3">
                             <a href="view_sellers.php" class="btn btn-outline-secondary">
-                                <i class="bi bi-arrow-left"></i> Back to Sellers
+                                <i class="bi bi-arrow-left" aria-hidden="true"></i> Back to Sellers
                             </a>
                         </div>
                     </form>
@@ -178,14 +184,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     <!-- Main JS File -->
     <script src="../assets/js/main.js"></script>
-    
-    <script>
-        // Initialize AOS
-        AOS.init({
-            duration: 800,
-            easing: 'slide'
-        });
-    </script>
 
 </body>
 </html>

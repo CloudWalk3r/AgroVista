@@ -6,7 +6,8 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] != 'admin') {
 }
 include '../db/DBcon.php';
 
-$product_id = $_GET['product_id'];
+// Cast to int to prevent SQL injection (product_id is an integer column)
+$product_id = isset($_GET['product_id']) ? (int) $_GET['product_id'] : 0;
 $admin_id = $_SESSION['user_id'];
 
 // Fetch product details
@@ -99,47 +100,63 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
     <link href="../assets/vendor/aos/aos.css" rel="stylesheet">
     
-    <!-- Main CSS File -->
+    <!-- Main & Design System CSS Files -->
+    <link href="../assets/css/design-system.css" rel="stylesheet">
     <link href="../assets/css/main.css" rel="stylesheet">
     
     <!-- Custom CSS -->
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background: #f8f9fa;
+            background: var(--av-bg, #f6f9f7);
         }
         
         .form-container {
             max-width: 800px;
-            margin: 40px auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin: 32px auto 48px auto;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: var(--av-shadow-md);
+            border: 1px solid var(--av-border, #d5e0d8);
             overflow: hidden;
         }
         
         .form-header {
-            background: linear-gradient(135deg, #4CAF50, #45a049);
-            color: white;
-            padding: 30px;
+            background: linear-gradient(135deg, #1b5e20, #1e4356);
+            color: #ffffff;
+            padding: 28px 24px;
             text-align: center;
+        }
+
+        .form-header h1 {
+            color: #ffffff;
+            font-size: var(--av-text-2xl);
+            font-weight: 700;
+            margin-bottom: 6px;
         }
         
         .category-info {
-            background: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 10px;
+            background: #eef3f0;
+            border: 1px solid #cbd5ce;
+            border-radius: 12px;
             padding: 20px;
-            margin-bottom: 30px;
+            margin-bottom: 28px;
+        }
+
+        .category-info h2 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #1e4356;
+            margin-bottom: 10px;
         }
         
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 22px;
         }
         
         .form-label {
             font-weight: 600;
-            color: #2c5530;
+            color: #1f2923;
             margin-bottom: 8px;
             display: flex;
             align-items: center;
@@ -147,36 +164,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         .form-label i {
             margin-right: 8px;
-            color: #4CAF50;
-        }
-        
-        .form-control, .form-select {
-            border: 2px solid #e9ecef;
-            border-radius: 10px;
-            padding: 12px 15px;
-            transition: all 0.3s;
-        }
-        
-        .form-control:focus, .form-select:focus {
-            border-color: #4CAF50;
-            box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
+            color: #1b5e20;
         }
         
         .btn-submit {
-            background: linear-gradient(135deg, #4CAF50, #45a049);
-            color: white;
+            background: #1b5e20;
+            color: #ffffff;
             border: none;
-            padding: 15px 40px;
-            border-radius: 25px;
+            padding: 14px 36px;
+            border-radius: 999px;
             font-weight: 600;
             width: 100%;
-            transition: all 0.3s;
+            transition: all 0.25s ease;
         }
         
-        .btn-submit:hover {
-            background: linear-gradient(135deg, #45a049, #3d8b40);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        .btn-submit:hover,
+        .btn-submit:focus-visible {
+            background: #144718;
+            color: #ffffff;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(27, 94, 32, 0.25);
         }
         
         .form-control[type="file"] {
@@ -184,24 +191,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         
         .form-control[type="file"]::-webkit-file-upload-button {
-            background: #4CAF50;
-            color: white;
+            background: #1b5e20;
+            color: #ffffff;
             border: none;
-            padding: 6px 12px;
-            border-radius: 5px;
-            margin-right: 10px;
+            padding: 6px 14px;
+            border-radius: 6px;
+            margin-right: 12px;
             cursor: pointer;
+            font-weight: 500;
         }
         
         .form-control[type="file"]::-webkit-file-upload-button:hover {
-            background: #45a049;
+            background: #144718;
         }
         
         .form-group small {
             display: block;
-            margin-top: 5px;
-            color: #6c757d;
-            font-size: 12px;
+            margin-top: 6px;
+            color: #4a5950;
+            font-size: 0.85rem;
         }
     </style>
 </head>
@@ -209,38 +217,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <?php include 'admin_header.php'; ?>
 
-    <main class="main">
+    <main id="main-content" class="main">
         <div class="container">
             <div class="form-container" data-aos="fade-up">
                 <div class="form-header">
-                    <h2><i class="bi bi-pencil-square"></i> Edit Product</h2>
-                    <p class="mb-0">Update product information and video files</p>
+                    <h1><i class="bi bi-pencil-square me-2" aria-hidden="true"></i>Edit Product</h1>
+                    <p class="mb-0">Update product information and demonstration video</p>
                 </div>
                 
                 <div class="form-body p-4">
                     <?php if (isset($error_message)): ?>
-                        <div class="alert alert-danger" role="alert">
-                            <i class="bi bi-exclamation-triangle"></i> <?php echo $error_message; ?>
+                        <div class="alert alert-danger" role="alert" aria-live="assertive">
+                            <i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>
+                            <span><?php echo htmlspecialchars($error_message); ?></span>
                         </div>
                     <?php endif; ?>
                     
                     <div class="category-info">
-                        <h5><i class="bi bi-info-circle"></i> Category Information</h5>
+                        <h2><i class="bi bi-info-circle me-1" aria-hidden="true"></i> Category Information</h2>
                         <ul class="mb-0">
                             <li><strong>Utilized Products:</strong> Traditional Sri Lankan products like Cinnamon, Kithul, Tea, and Dry Fish</li>
                             <li><strong>UnderUtilized Fruits:</strong> Indigenous and rare fruits that are underutilized in the market</li>
                         </ul>
                     </div>
                     
-                    <form method="POST" enctype="multipart/form-data">
+                    <form method="POST" enctype="multipart/form-data" action="">
                         <div class="form-group">
                             <label for="seller_id" class="form-label">
-                                <i class="bi bi-person-circle"></i> Select Seller
+                                <i class="bi bi-person-circle" aria-hidden="true"></i> Select Seller
                             </label>
                             <select name="seller_id" id="seller_id" class="form-select" required>
                                 <option value="">Select Seller</option>
                                 <?php while ($seller = $sellers_result->fetch_assoc()) { ?>
-                                    <option value="<?php echo $seller['seller_id']; ?>" 
+                                    <option value="<?php echo (int)$seller['seller_id']; ?>" 
                                             <?php echo ($seller['seller_id'] == $product['seller_id']) ? 'selected' : ''; ?>>
                                         <?php echo htmlspecialchars($seller['seller_name']); ?>
                                     </option>
@@ -250,7 +259,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         
                         <div class="form-group">
                             <label for="product_name" class="form-label">
-                                <i class="bi bi-box-seam"></i> Product Name
+                                <i class="bi bi-box-seam" aria-hidden="true"></i> Product Name
                             </label>
                             <input type="text" name="product_name" id="product_name" class="form-control" 
                                    placeholder="Enter product name" value="<?php echo htmlspecialchars($product['name']); ?>" required />
@@ -258,7 +267,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         
                         <div class="form-group">
                             <label for="category" class="form-label">
-                                <i class="bi bi-bookmark"></i> Product Category
+                                <i class="bi bi-bookmark" aria-hidden="true"></i> Product Category
                             </label>
                             <select name="category" id="category" class="form-select" required>
                                 <option value="">Select Category</option>
@@ -269,27 +278,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         
                         <div class="form-group">
                             <label for="video_file" class="form-label">
-                                <i class="bi bi-camera-video"></i> Video File
+                                <i class="bi bi-camera-video" aria-hidden="true"></i> Video File
                             </label>
                             <input type="file" name="video_file" id="video_file" class="form-control" 
-                                   accept=".mp4,.webm,.ogg,.avi,.mov" />
-                            <small>Optional: Upload a new video file to replace the current one. Supported formats: MP4, WebM, OGG, AVI, MOV</small>
+                                   accept=".mp4,.webm,.ogg,.avi,.mov" aria-describedby="edit_video_help" />
+                            <small id="edit_video_help">Optional: Upload a new video file to replace the current one. Supported formats: MP4, WebM, OGG, AVI, MOV.</small>
                             <?php if (!empty($product['video_url'])): ?>
                                 <div class="mt-2">
-                                    <small class="text-muted">Current video: <?php echo htmlspecialchars(basename($product['video_url'])); ?></small>
+                                    <small class="fw-semibold text-success">
+                                        <i class="bi bi-check-circle me-1" aria-hidden="true"></i>Current video: <?php echo htmlspecialchars(basename($product['video_url'])); ?>
+                                    </small>
                                 </div>
                             <?php endif; ?>
                         </div>
                         
                         <div class="form-group">
-                            <button type="submit" name="edit_product" class="btn btn-submit">
-                                <i class="bi bi-check-circle"></i> Save Changes
+                            <button type="submit" name="edit_product" class="btn btn-submit" data-loading-text="Saving Changes...">
+                                <i class="bi bi-check-circle" aria-hidden="true"></i> Save Changes
                             </button>
                         </div>
                         
                         <div class="text-center mt-3">
                             <a href="view_products.php" class="btn btn-outline-secondary">
-                                <i class="bi bi-arrow-left"></i> Back to Products
+                                <i class="bi bi-arrow-left" aria-hidden="true"></i> Back to Products
                             </a>
                         </div>
                     </form>
@@ -304,18 +315,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     <!-- Main JS File -->
     <script src="../assets/js/main.js"></script>
-    
-    <script>
-        // Initialize AOS
-        AOS.init({
-            duration: 800,
-            easing: 'slide'
-        });
-    </script>
-
-</body>
-</html>
-    </div>
 
 </body>
 </html>

@@ -25,97 +25,43 @@ $sellers = $conn->query("SELECT * FROM sellers ORDER BY seller_id DESC");
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com" rel="preconnect">
     <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,909&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
     
     <!-- Vendor CSS Files -->
     <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
     <link href="../assets/vendor/aos/aos.css" rel="stylesheet">
     
-    <!-- Main CSS File -->
+    <!-- Main & Design System CSS Files -->
+    <link href="../assets/css/design-system.css" rel="stylesheet">
     <link href="../assets/css/main.css" rel="stylesheet">
     
     <!-- Custom Admin CSS -->
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: var(--av-bg, #f6f9f7);
             min-height: 100vh;
         }
         
-        .admin-header {
-            background: linear-gradient(135deg, #4CAF50, #45a049);
-            color: white;
-            padding: 15px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        .admin-nav {
-            background: #2c5530;
-            padding: 10px 0;
-        }
-        
-        .admin-nav .nav-link {
-            color: white;
-            font-weight: 500;
-            margin: 0 15px;
-            transition: color 0.3s;
-        }
-        
-        .admin-nav .nav-link:hover,
-        .admin-nav .nav-link.active {
-            color: #4CAF50;
-        }
-        
         .main-content {
-            padding: 30px 0;
+            padding: 30px 0 50px 0;
         }
         
         .page-header {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background: #ffffff;
+            padding: 24px;
+            border-radius: 14px;
+            margin-bottom: 24px;
+            box-shadow: var(--av-shadow-sm);
+            border: 1px solid var(--av-border, #d5e0d8);
         }
-        
-        .card {
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-            transition: transform 0.3s ease;
-        }
-        
-        .card:hover {
-            transform: translateY(-3px);
-        }
-        
-        .btn-admin {
-            background: linear-gradient(135deg, #4CAF50, #45a049);
-            color: white;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-weight: 500;
-            text-decoration: none;
-            display: inline-block;
-            margin: 3px;
-            transition: all 0.3s;
-        }
-        
-        .btn-admin:hover {
-            background: linear-gradient(135deg, #45a049, #3d8b40);
-            color: white;
-            transform: translateY(-1px);
-        }
-        
-        .btn-edit {
-            background: linear-gradient(135deg, #17a2b8, #138496);
-        }
-        
-        .btn-delete {
-            background: linear-gradient(135deg, #dc3545, #c82333);
+
+        .page-header h1 {
+            font-size: var(--av-text-2xl);
+            font-weight: 700;
+            color: var(--av-secondary, #1e4356);
+            margin-bottom: 4px;
         }
     </style>
 </head>
@@ -124,80 +70,115 @@ $sellers = $conn->query("SELECT * FROM sellers ORDER BY seller_id DESC");
     <?php include 'admin_header.php'; ?>
     
     <!-- Main Content -->
-    <div class="main-content">
+    <main id="main-content" class="main-content">
         <div class="container">
             
+            <?php if (isset($_GET['success'])): ?>
+                <div class="alert alert-success" role="status" aria-live="polite">
+                    <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
+                    <span>
+                        <?php
+                        if ($_GET['success'] === 'seller_updated') {
+                            echo 'Seller details updated successfully.';
+                        } elseif ($_GET['success'] === 'seller_deleted') {
+                            echo 'Seller and associated products deleted successfully.';
+                        } else {
+                            echo 'Operation completed successfully.';
+                        }
+                        ?>
+                    </span>
+                </div>
+            <?php endif; ?>
+
+            <?php if (isset($_GET['error'])): ?>
+                <div class="alert alert-danger" role="alert" aria-live="assertive">
+                    <i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>
+                    <span>
+                        <?php
+                        if ($_GET['error'] === 'seller_not_found') {
+                            echo 'Requested seller could not be found.';
+                        } else {
+                            echo 'An error occurred while processing your request.';
+                        }
+                        ?>
+                    </span>
+                </div>
+            <?php endif; ?>
+
             <!-- Page Header -->
             <div class="page-header">
-                <div class="row align-items-center">
-                    <div class="col-md-6">
-                        <h2><i class="bi bi-people"></i> Seller Management</h2>
-                        <p class="mb-0 text-muted">Manage all sellers in the system</p>
+                <div class="row align-items-center gy-3">
+                    <div class="col-md-7">
+                        <h1><i class="bi bi-people me-2 text-success" aria-hidden="true"></i>Seller Management</h1>
+                        <p class="mb-0 text-muted">Manage all registered sellers and their contact details</p>
                     </div>
-                    <div class="col-md-6 text-end">
+                    <div class="col-md-5 text-md-end">
                         <a href="add_seller.php" class="btn-admin">
-                            <i class="bi bi-person-plus"></i> Add New Seller
+                            <i class="bi bi-person-plus" aria-hidden="true"></i> Add New Seller
                         </a>
                     </div>
                 </div>
             </div>
             
-            <!-- Sellers Grid -->
-            <div class="row">
-                <?php while ($seller = $sellers->fetch_assoc()) { ?>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-start mb-3">
-                                    <h5 class="card-title"><?php echo htmlspecialchars($seller['seller_name']); ?></h5>
-                                </div>
-                                
-                                <div class="mb-3">
-                                    <p class="card-text">
-                                        <strong><i class="bi bi-telephone"></i> Phone:</strong> 
-                                        <?php echo htmlspecialchars($seller['phone_number']); ?>
-                                    </p>
-                                    
-                                    <p class="card-text">
-                                        <strong><i class="bi bi-geo-alt"></i> Address:</strong> 
-                                        <?php echo htmlspecialchars($seller['address']); ?>
-                                    </p>
-                                    
-                                    <small class="text-muted">
-                                        <i class="bi bi-calendar"></i> Seller ID: <?php echo $seller['seller_id']; ?>
-                                    </small>
-                                </div>
-                                
-                                <div class="d-flex gap-2">
-                                    <a href="edit_seller.php?seller_id=<?php echo $seller['seller_id']; ?>" class="btn-admin btn-edit">
-                                        <i class="bi bi-pencil"></i> Edit
-                                    </a>
-                                    <a href="delete_seller.php?seller_id=<?php echo $seller['seller_id']; ?>" 
-                                       class="btn-admin btn-delete" 
-                                       onclick="return confirm('Are you sure you want to delete this seller? This action cannot be undone.');">
-                                        <i class="bi bi-trash"></i> Delete
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                <?php } ?>
-            </div>
-            
-            <?php if ($sellers->num_rows == 0): ?>
+            <!-- Responsive Sellers Table (Desktop Table + Mobile Stacked Cards) -->
+            <?php if ($sellers && $sellers->num_rows > 0): ?>
+                <div class="table-responsive av-table-card">
+                    <table class="table av-table" aria-label="Registered sellers list">
+                        <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Seller Name</th>
+                                <th scope="col">Phone Number</th>
+                                <th scope="col">Address</th>
+                                <th scope="col" class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php while ($seller = $sellers->fetch_assoc()) { ?>
+                                <tr>
+                                    <td data-label="Seller ID">#<?php echo (int)$seller['seller_id']; ?></td>
+                                    <td data-label="Seller Name" class="fw-semibold"><?php echo htmlspecialchars($seller['seller_name']); ?></td>
+                                    <td data-label="Phone">
+                                        <a href="tel:<?php echo htmlspecialchars($seller['phone_number']); ?>" class="text-decoration-none">
+                                            <i class="bi bi-telephone me-1" aria-hidden="true"></i><?php echo htmlspecialchars($seller['phone_number']); ?>
+                                        </a>
+                                    </td>
+                                    <td data-label="Address"><?php echo htmlspecialchars($seller['address']); ?></td>
+                                    <td data-label="Actions">
+                                        <div class="av-table-actions">
+                                            <a href="edit_seller.php?seller_id=<?php echo (int)$seller['seller_id']; ?>" 
+                                               class="btn-admin btn-edit"
+                                               aria-label="Edit seller <?php echo htmlspecialchars($seller['seller_name']); ?>">
+                                                <i class="bi bi-pencil" aria-hidden="true"></i> Edit
+                                            </a>
+                                            <a href="delete_seller.php?seller_id=<?php echo (int)$seller['seller_id']; ?>" 
+                                               class="btn-admin btn-delete" 
+                                               aria-label="Delete seller <?php echo htmlspecialchars($seller['seller_name']); ?>"
+                                               onclick="return confirm('Are you sure you want to delete seller &quot;<?php echo htmlspecialchars(addslashes($seller['seller_name'])); ?>&quot; and their products? This action cannot be undone.');">
+                                                <i class="bi bi-trash" aria-hidden="true"></i> Delete
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
+            <?php else: ?>
                 <div class="text-center py-5">
-                    <div class="card">
-                        <div class="card-body">
-                            <i class="bi bi-people" style="font-size: 3rem; color: #ccc;"></i>
-                            <h4 class="mt-3">No Sellers Found</h4>
-                            <p class="text-muted">No sellers have been added yet.</p>
-                        </div>
+                    <div class="av-table-card p-5">
+                        <i class="bi bi-people" style="font-size: 3rem; color: #6c757d;" aria-hidden="true"></i>
+                        <h2 class="h4 mt-3">No Sellers Found</h2>
+                        <p class="text-muted mb-3">No sellers have been added yet.</p>
+                        <a href="add_seller.php" class="btn-admin">
+                            <i class="bi bi-person-plus" aria-hidden="true"></i> Add First Seller
+                        </a>
                     </div>
                 </div>
             <?php endif; ?>
 
         </div>
-    </div>
+    </main>
 
     <!-- Vendor JS Files -->
     <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -205,14 +186,6 @@ $sellers = $conn->query("SELECT * FROM sellers ORDER BY seller_id DESC");
     
     <!-- Main JS File -->
     <script src="../assets/js/main.js"></script>
-    
-    <script>
-        // Initialize AOS
-        AOS.init({
-            duration: 800,
-            easing: 'slide'
-        });
-    </script>
 
 </body>
 </html>

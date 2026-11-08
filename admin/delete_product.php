@@ -7,8 +7,9 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] != 'admin') {
 include '../db/DBcon.php';
 
 if (isset($_GET['product_id'])) {
-    $product_id = $_GET['product_id'];
-    
+    // Cast to int to prevent SQL injection (product_id is an integer column)
+    $product_id = (int) $_GET['product_id'];
+
     $check = $conn->query("SELECT * FROM products WHERE product_id = $product_id");
 
     if ($check->num_rows > 0) {

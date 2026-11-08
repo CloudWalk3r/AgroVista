@@ -1,7 +1,4 @@
-# Database connection file
-db/DBcon.php
-
-# Environment files
+# Environment files (NEVER commit real credentials; .env.example is committed)
 .env
 .env.local
 .env.production
@@ -53,9 +50,6 @@ coverage/
 # User-specific files
 *.sublime-workspace
 *.sublime-project
-
-# Shared session files
-shared/session_active.php
 
 # Composer (if using)
 vendor/

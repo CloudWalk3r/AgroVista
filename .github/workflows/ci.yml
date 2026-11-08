@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  php-lint:
+    name: PHP Lint & Composer Validate
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-version: ['7.4', '8.1', '8.3']
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP ${{ matrix.php-version }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: mysqli, gd, fileinfo
+          tools: composer
+
+      - name: Validate composer.json
+        run: composer validate --no-check-publish
+
+      - name: Install dependencies (if lockfile/deps resolvable)
+        run: composer install --no-interaction --no-progress --prefer-dist || true
+
+      - name: PHP syntax check (php -l) over all PHP files
+        run: |
+          set -e
+          error=0
+          while IFS= read -r -d '' file; do
+            php -l "$file" > /dev/null || error=1
+          done < <(find . -type f -name '*.php' -not -path './vendor/*' -not -path './assets/*' -print0)
+          if [ "$error" -ne 0 ]; then
+            echo "PHP lint found syntax errors."
+            exit 1
+          fi
+          echo "All PHP files passed php -l."
+
+  code-style:
+    name: PHP-CS-Fixer (non-blocking)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer, php-cs-fixer
+
+      - name: Check code style (dry run)
+        run: php-cs-fixer fix --dry-run --diff || true

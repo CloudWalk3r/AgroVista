@@ -1,192 +1,246 @@
-# Agro Vista - Agricultural E-Commerce Platform
+# AgroVista — Agricultural Trade-Fair Platform
 
-![Agro Vista Logo](assets/img/logo.png)
+![AgroVista Logo](assets/img/logo.png)
 
-## 🌾 Project Overview
+AgroVista is a digital agricultural trade-fair and e-commerce platform that
+promotes and showcases high-quality Sri Lankan agricultural products to local
+and international markets. It provides a public storefront for browsing products
+and product videos, plus a secure admin panel for managing products and sellers.
 
-Agro Vista is a comprehensive digital trade fair platform developed by undergraduates of the Faculty of Agricultural Sciences, Sabaragamuwa University of Sri Lanka. The platform promotes and supports local agricultural industries by showcasing high-quality Sri Lankan products to both local and international markets.
+> Originally developed as an academic project at the Faculty of Agricultural
+> Sciences, Sabaragamuwa University of Sri Lanka, now being standardized for a
+> public product release.
 
-## ✨ Features
+---
 
-### 🏪 Product Categories
-- **Utilized Products**: Traditional Sri Lankan agricultural products
-  - Ceylon Cinnamon
-  - Kithul Products
-  - Handmade Tea
-  - Dry Fish
-- **Underutilized Fruits**: Indigenous and rare fruits that are underutilized in the market
+## Table of Contents
 
-### 👥 User Management
-- **Public Users**: Browse products, view details, and watch product videos
-- **Sellers**: Manage their product listings through the admin panel
-- **Administrators**: Full CRUD operations for products and sellers
+- [Features](#features)
+- [Screenshots](#screenshots)
+- [Tech Stack](#tech-stack)
+- [Prerequisites](#prerequisites)
+- [Setup & Installation](#setup--installation)
+- [Environment / Configuration Variables](#environment--configuration-variables)
+- [Project Structure](#project-structure)
+- [Database Schema](#database-schema)
+- [Deployment](#deployment)
+- [Security Notes](#security-notes)
+- [Contributing](#contributing)
+- [License](#license)
 
-### 🎥 Multimedia Support
-- Product video demonstrations
-- Image galleries with fallback system
-- Responsive design for all devices
+---
 
-## 🏗️ Project Structure
+## Features
 
-```
-agri-ecommerce/
-├── admin/                      # Administrative interface
-│   ├── add_product.php        # Add new products
-│   ├── edit_product.php       # Edit existing products
-│   ├── delete_product.php     # Delete products
-│   ├── view_products.php      # View all products with filtering
-│   ├── add_seller.php         # Seller management
-│   ├── edit_seller.php
-│   ├── delete_seller.php
-│   ├── view_sellers.php
-│   └── dashboard_admin.php    # Admin dashboard
-├── api/                       # API endpoints
-├── assets/                    # Static resources
-│   ├── css/                   # Stylesheets
-│   ├── js/                    # JavaScript files
-│   ├── img/                   # Images
-│   │   └── products/          # Product images
-│   ├── fonts/                 # Custom fonts
-│   └── vendor/                # Third-party libraries
-├── authentication/            # User authentication
-│   ├── login.php
-│   ├── register.php
-│   └── logout.php
-├── db/                        # Database configuration
-│   └── DBcon.php
-├── shared/                    # Public pages
-│   ├── index.php              # Homepage
-│   ├── products.php           # Utilized products showcase
-│   ├── ufruits.php            # Underutilized fruits page
-│   ├── viewproducts.php       # Category-specific product listings
-│   ├── contact.php            # Contact information
-│   └── session_active.php     # Session management
-└── db.sql                     # Database schema
-```
+### Public storefront
+- Browse **Utilized Products** (Ceylon Cinnamon, Kithul, Handmade Tea, Dry Fish).
+- Browse **Underutilized Fruits** — indigenous and rare fruits.
+- Product video demonstrations with an image-fallback system.
+- Responsive, mobile-first design.
+- Contact page and profile editing.
 
-## 🗄️ Database Schema
+### Admin panel
+- Secure, session-based admin authentication.
+- Full CRUD for **products** and **sellers**.
+- Video upload for product demonstrations.
+- Category filtering of product listings.
 
-### Tables
-- **`products`**: Product information with seller relationships
-- **`sellers`**: Seller profiles and contact information  
-- **`users`**: User authentication and profiles
+---
 
-### Key Relationships
-- Products are linked to sellers via `seller_id`
-- Categories are managed through ENUM values ('Utilized', 'UnderUtilized')
+## Screenshots
 
-## 🚀 Installation & Setup
+> Replace the placeholders below with real screenshots before release.
 
-### Prerequisites
-- PHP 7.4 or higher
-- MySQL 5.7 or higher
-- Apache/Nginx web server
-- Modern web browser
+| Home | Product Listing | Admin Dashboard |
+| --- | --- | --- |
+| _placeholder_ | _placeholder_ | _placeholder_ |
 
-### Installation Steps
+---
+
+## Tech Stack
+
+| Layer | Technology |
+| --- | --- |
+| Language | PHP (>= 7.4; tested on 8.x) |
+| Database | MySQL 5.7+ / MariaDB |
+| DB driver | `mysqli` |
+| Config | [`vlucas/phpdotenv`](https://github.com/vlucas/phpdotenv) via `.env` |
+| Frontend | HTML5, CSS3, Bootstrap 5, Bootstrap Icons, AOS |
+| Dependency mgr | Composer |
+| Web server | Apache (XAMPP) or PHP built-in server |
+
+---
+
+## Prerequisites
+
+- **PHP 7.4 or higher** with `mysqli`, `gd`, and `fileinfo` extensions enabled.
+- **MySQL 5.7+** or MariaDB.
+- **Composer** (for the `phpdotenv` dependency).
+- A web server — **XAMPP** (Apache + MySQL) is the easiest option on Windows,
+  or you can use PHP's built-in server for development.
+
+---
+
+## Setup & Installation
 
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
-   cd agri-ecommerce
+   cd AgroVista
    ```
 
-2. **Database Setup**
+2. **Install PHP dependencies**
    ```bash
-   # Import the database schema
-   mysql -u your_username -p your_database_name < db.sql
+   composer install
    ```
 
-3. **Configure Database Connection**
-   ```php
-   // Edit db/DBcon.php
-   $servername = "localhost"; 
-   $username = "your_db_username"; 
-   $password = "your_db_password"; 
-   $database = "your_database_name";
-   ```
-
-4. **Set Directory Permissions**
+3. **Create the database and import the schema**
    ```bash
-   chmod 755 assets/img/products/
-   chmod 644 *.php
+   mysql -u your_username -p -e "CREATE DATABASE agriecom;"
+   mysql -u your_username -p agriecom < db.sql
    ```
 
-5. **Web Server Configuration**
-   - Point document root to the project directory
-   - Ensure PHP extensions are enabled: `mysqli`, `gd`, `fileinfo`
+4. **Configure environment variables**
+   ```bash
+   cp .env.example .env    # Windows: copy .env.example .env
+   ```
+   Edit `.env` and set your database credentials (see the table below).
 
-## 💻 Usage
+5. **Create the first admin account**
+   ```bash
+   # PowerShell
+   $env:ADMIN_EMAIL="you@example.com"; $env:ADMIN_PASSWORD="a-strong-password"
+   php authentication/create_admin.php
 
-### For Public Users
-1. Visit the homepage (`index.php`)
-2. Browse products via navigation menu
-3. Click on product categories to view specific items
-4. Watch product demonstration videos
-5. Contact sellers through provided information
+   # bash
+   ADMIN_EMAIL="you@example.com" ADMIN_PASSWORD="a-strong-password" php authentication/create_admin.php
+   ```
 
-### For Administrators
-1. Login through the authentication system
-2. Access admin panel for product management
-3. Add/Edit/Delete products and sellers
-4. Filter products by category
-5. Monitor system activity
-
-## 🛠️ Technical Features
-
-### Frontend Technologies
-- **HTML5/CSS3**: Modern, responsive design
-- **Bootstrap 5**: Mobile-first responsive framework
-- **JavaScript**: Interactive user interface
-- **AOS Library**: Smooth scroll animations
-- **Custom CSS**: Tailored styling for agricultural theme
-
-### Backend Technologies
-- **PHP**: Server-side logic and database interactions
-- **MySQL**: Relational database management
-- **Session Management**: Secure user authentication
-- **File Upload System**: Image handling for products
-
-### Security Features
-- SQL injection prevention with prepared statements
-- XSS protection with input sanitization
-- Session-based authentication
-- File upload validation
-- Admin access control
-
-## 🎨 Design Philosophy
-
-The platform features a clean, agricultural-themed design that emphasizes:
-- **Green Color Palette**: Reflecting agricultural and natural themes
-- **Card-based Layout**: Easy product browsing
-- **Responsive Design**: Seamless experience across devices
-- **Intuitive Navigation**: Clear pathways for different user types
-- **Visual Hierarchy**: Important information prominently displayed
-
-## 🤝 Contributing
-
-This project was developed as an academic initiative. Contributions are welcome in the form of:
-- Bug reports and fixes
-- Feature enhancements
-- Documentation improvements
-- Code optimization
-
-## 📞 Contact & Support
-
-**Institution**: Faculty of Agricultural Sciences, Sabaragamuwa University of Sri Lanka
-**Email**: agrovista@sabac.lk
-**Phone**: (081) 5 612 850
-
-## 📄 License
-
-This project is developed for academic purposes by the Faculty of Computing, Sabaragamuwa University of Sri Lanka.
-
-## 🙏 Acknowledgments
-
-- Faculty of Computing, Sabaragamuwa University of Sri Lanka
-- Local farmers and producers who inspire our mission
-- Open-source community for the tools and libraries used
+6. **Run the application**
+   - **With XAMPP:** place the project in `htdocs/` and visit
+     `http://localhost/AgroVista/shared/index.php`.
+   - **With PHP's built-in server:**
+     ```bash
+     php -S localhost:8000
+     ```
+     Then open `http://localhost:8000/shared/index.php`.
 
 ---
 
-**© 2025 Agro Vista - Promoting Sri Lankan Agricultural Excellence**
+## Environment / Configuration Variables
+
+All configuration is read from a gitignored `.env` file (see `.env.example`).
+**Never commit real credentials.**
+
+| Variable | Description | Example |
+| --- | --- | --- |
+| `DB_HOST` | MySQL host | `localhost` |
+| `DB_USER` | MySQL username | `root` |
+| `DB_PASSWORD` | MySQL password | `secret` |
+| `DB_NAME` | Database name | `agriecom` |
+| `ADMIN_EMAIL` | Email for the seeded admin (seed script only) | `admin@example.com` |
+| `ADMIN_PASSWORD` | Password for the seeded admin (min 8 chars) | `a-strong-password` |
+
+The database connection is centralized in `db/DBcon.php`, which loads these
+values via `phpdotenv`.
+
+---
+
+## Project Structure
+
+```
+AgroVista/
+├── admin/                      # Admin panel (session-protected)
+│   ├── add_product.php
+│   ├── edit_product.php
+│   ├── delete_product.php
+│   ├── view_products.php
+│   ├── add_seller.php
+│   ├── edit_seller.php
+│   ├── delete_seller.php
+│   ├── view_sellers.php
+│   ├── admin_header.php
+│   └── dashboard_admin.php
+├── authentication/             # Login / register / admin seeding
+│   ├── login.php
+│   ├── register.php
+│   ├── logout.php
+│   └── create_admin.php
+├── shared/                     # Public pages
+│   ├── index.php               # Homepage
+│   ├── products.php            # Utilized products
+│   ├── ufruits.php             # Underutilized fruits
+│   ├── cinnamon.php / kithul.php / tea.php / dry_fish.php
+│   ├── contact.php
+│   ├── edit_profile.php
+│   └── session_active.php
+├── db/
+│   └── DBcon.php               # DB connection (reads .env)
+├── assets/                     # CSS, JS, images, fonts, vendor libs, videos
+├── db.sql                      # Database schema + seed data
+├── composer.json
+├── .env.example
+├── VIDEO_FEATURES.md           # Video subsystem docs
+└── VIDEO_ORGANIZATION.md
+```
+
+> Note: There are a few development/debug helpers (`admin/upload_test.php`,
+> `shared/debug_videos.php`, `shared/test_videos.php`). Remove these before a
+> public production deployment — see `RELEASE_READINESS.md`.
+
+---
+
+## Database Schema
+
+| Table | Purpose |
+| --- | --- |
+| `users` | Admin/user authentication (email + bcrypt `password_hash`, `user_type`) |
+| `sellers` | Seller profiles (name, phone, address) |
+| `products` | Products linked to a seller, category ENUM, video URL |
+
+Relationships:
+- `products.seller_id` → `sellers.seller_id` (`ON DELETE CASCADE`).
+- `category` is an ENUM of `'Utilized'` / `'UnderUtilized'`.
+
+---
+
+## Deployment
+
+1. Provision a server with PHP 7.4+ and MySQL, and a web server (Apache/Nginx).
+2. Deploy the code and run `composer install --no-dev --optimize-autoloader`.
+3. Create the production database and import `db.sql`.
+4. Create a `.env` file with production credentials (outside version control).
+5. Point the document root at the project directory; ensure the storefront and
+   admin paths resolve (e.g. `shared/index.php`, `admin/`).
+6. Ensure the upload directories (`assets/videos/products/...`) are writable by
+   the web server user.
+7. **Remove the debug/test scripts** listed above.
+8. Serve over **HTTPS** and set secure session cookie flags.
+
+---
+
+## Security Notes
+
+AgroVista is being hardened for release. Key points:
+
+- Credentials are loaded from a gitignored `.env` (no hardcoded secrets).
+- Passwords are hashed with bcrypt (`password_hash` / `password_verify`).
+- Admin pages are gated by a session + `user_type` check.
+- Integer IDs used in admin delete/edit queries are cast to `int`.
+
+**Open items** (tracked in `RELEASE_READINESS.md`): public registration currently
+allows creating admin accounts, several queries still use escaping instead of
+prepared statements, and uploads are validated by extension only. Review these
+before a public launch.
+
+---
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+---
+
+## License
+
+Released under the [MIT License](LICENSE). Copyright (c) 2026 Kavindu Aluthwaththa.

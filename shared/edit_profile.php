@@ -110,7 +110,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com" rel="preconnect">
     <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,0,100,300,400,500,700,900;1,100,300,400,500,700,900&family=Inter:wght@100,200,300,400,500,600,700,800,900&family=Nunito:ital,wght@0,200,300,400,500,600,700,800,900;1,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
 
     <!-- Vendor CSS Files -->
     <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -119,25 +119,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link href="../assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
     <link href="../assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
-    <!-- Main CSS File -->
+    <!-- Main & Design System CSS Files -->
+    <link href="../assets/css/design-system.css" rel="stylesheet">
     <link href="../assets/css/main.css" rel="stylesheet">
 
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background: #f8f9fa;
+            background: var(--av-bg, #f6f9f7);
         }
         
         .edit-profile-container {
             min-height: 100vh;
-            padding: 50px 0;
+            padding: 40px 0;
         }
         
         .profile-card {
             background: white;
-            border-radius: 15px;
+            border-radius: 16px;
             padding: 40px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            box-shadow: var(--av-shadow-md);
+            border: 1px solid var(--av-border);
             max-width: 600px;
             margin: 0 auto;
         }
@@ -147,88 +149,54 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             margin-bottom: 30px;
         }
         
-        .profile-header h2 {
-            color: #2c5530;
-            font-weight: 600;
+        .profile-header h1 {
+            color: var(--av-secondary, #1e4356);
+            font-weight: 700;
+            font-size: var(--av-text-2xl);
             margin-bottom: 10px;
         }
         
         .profile-header p {
-            color: #666;
-            margin-bottom: 0;
+            color: var(--av-text-muted);
+            margin-bottom: 10px;
         }
         
         .form-group {
             margin-bottom: 20px;
         }
         
-        .form-label {
-            font-weight: 500;
-            color: #333;
-            margin-bottom: 8px;
-        }
-        
-        .form-control {
-            border: 2px solid #e1e5e9;
-            border-radius: 8px;
-            padding: 12px 15px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
-        
-        .form-control:focus {
-            border-color: #4CAF50;
-            box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
-        }
-        
         .btn-primary {
-            background: linear-gradient(135deg, #4CAF50, #45a049);
+            background: var(--av-primary, #1b5e20);
             border: none;
             border-radius: 25px;
             padding: 12px 30px;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
+            font-weight: 600;
+            color: #ffffff;
+            transition: all 0.25s ease;
         }
         
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #45a049, #3d8b40);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        .btn-primary:hover,
+        .btn-primary:focus-visible {
+            background: var(--av-primary-hover, #144718);
+            color: #ffffff;
+            transform: translateY(-1px);
         }
         
         .btn-secondary {
-            background: linear-gradient(135deg, #6c757d, #5a6268);
+            background: var(--av-secondary, #1e4356);
             border: none;
             border-radius: 25px;
             padding: 12px 30px;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
+            font-weight: 600;
+            color: #ffffff;
+            transition: all 0.25s ease;
         }
         
-        .btn-secondary:hover {
-            background: linear-gradient(135deg, #5a6268, #495057);
-            transform: translateY(-2px);
-        }
-        
-        .alert {
-            border: none;
-            border-radius: 10px;
-            padding: 15px 20px;
-            margin-bottom: 25px;
-        }
-        
-        .alert-success {
-            background: linear-gradient(135deg, #4CAF50, #45a049);
-            color: white;
-        }
-        
-        .alert-danger {
-            background: linear-gradient(135deg, #dc3545, #c82333);
-            color: white;
+        .btn-secondary:hover,
+        .btn-secondary:focus-visible {
+            background: var(--av-secondary-hover, #153140);
+            color: #ffffff;
+            transform: translateY(-1px);
         }
         
         .user-type-badge {
@@ -236,18 +204,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             padding: 5px 15px;
             border-radius: 20px;
             font-size: 12px;
-            font-weight: 500;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
         
         .badge-admin {
-            background: linear-gradient(135deg, #dc3545, #c82333);
+            background: var(--av-danger, #b02a37);
             color: white;
         }
         
         .badge-user {
-            background: linear-gradient(135deg, #4CAF50, #45a049);
+            background: var(--av-primary, #1b5e20);
             color: white;
         }
         
@@ -257,14 +225,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         
         .back-links a {
-            color: #4CAF50;
+            color: var(--av-primary, #1b5e20);
             text-decoration: none;
             margin: 0 15px;
-            font-weight: 500;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            min-height: 44px;
         }
         
         .back-links a:hover {
-            color: #45a049;
+            color: var(--av-primary-hover, #144718);
             text-decoration: underline;
         }
 
@@ -274,34 +245,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             margin-top: 25px;
         }
 
-        .password-section h5 {
-            color: #2c5530;
+        .password-section h2 {
+            color: var(--av-secondary, #1e4356);
+            font-size: 1.15rem;
             margin-bottom: 20px;
             font-weight: 600;
         }
     </style>
 </head>
 <body>
-    <div class="edit-profile-container">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <main id="main-content" class="edit-profile-container">
         <div class="container">
             <div class="profile-card">
                 <div class="profile-header">
-                    <h2>Edit Profile</h2>
+                    <h1>Edit Profile</h1>
                     <p>Update your account information</p>
                     <span class="user-type-badge <?php echo $user['user_type'] === 'admin' ? 'badge-admin' : 'badge-user'; ?>">
-                        <?php echo ucfirst($user['user_type']); ?>
+                        <?php echo htmlspecialchars(ucfirst($user['user_type'])); ?>
                     </span>
                 </div>
 
                 <?php if (!empty($message)): ?>
-                    <div class="alert alert-success" role="alert">
-                        <i class="bi bi-check-circle-fill me-2"></i><?php echo $message; ?>
+                    <div class="alert alert-success" role="status" aria-live="polite">
+                        <i class="bi bi-check-circle-fill me-2" aria-hidden="true"></i>
+                        <span><?php echo htmlspecialchars($message); ?></span>
                     </div>
                 <?php endif; ?>
 
                 <?php if (!empty($error)): ?>
-                    <div class="alert alert-danger" role="alert">
-                        <i class="bi bi-exclamation-triangle-fill me-2"></i><?php echo $error; ?>
+                    <div class="alert alert-danger" role="alert" aria-live="assertive">
+                        <i class="bi bi-exclamation-triangle-fill me-2" aria-hidden="true"></i>
+                        <span><?php echo htmlspecialchars($error); ?></span>
                     </div>
                 <?php endif; ?>
 
@@ -309,54 +285,54 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="form-group">
                         <label for="email" class="form-label">Email Address</label>
                         <input type="email" class="form-control" id="email" name="email" 
-                               value="<?php echo htmlspecialchars($user['email']); ?>" required>
+                               value="<?php echo htmlspecialchars($user['email']); ?>" autocomplete="email" required>
                     </div>
 
                     <?php if ($user['user_type'] === 'admin'): ?>
                     <div class="form-group">
                         <label for="user_type" class="form-label">User Type</label>
-                        <select class="form-control" id="user_type" name="user_type">
+                        <select class="form-select" id="user_type" name="user_type" aria-describedby="user_type_help">
                             <option value="admin" <?php echo $user['user_type'] === 'admin' ? 'selected' : ''; ?>>Admin</option>
                             <option value="user" <?php echo $user['user_type'] === 'user' ? 'selected' : ''; ?>>User</option>
                         </select>
-                        <small class="form-text text-muted">Only admins can change user type.</small>
+                        <small id="user_type_help" class="form-text text-muted">Only admins can change user type.</small>
                     </div>
                     <?php endif; ?>
 
                     <div class="form-group">
                         <label for="current_password" class="form-label">Current Password</label>
-                        <input type="password" class="form-control" id="current_password" name="current_password" required>
-                        <small class="form-text text-muted">Required to make any changes.</small>
+                        <input type="password" class="form-control" id="current_password" name="current_password" autocomplete="current-password" aria-describedby="current_password_help" required>
+                        <small id="current_password_help" class="form-text text-muted">Required to make any changes.</small>
                     </div>
 
                     <div class="password-section">
-                        <h5>Change Password <small class="text-muted">(Optional)</small></h5>
+                        <h2>Change Password <small class="text-muted fw-normal">(Optional)</small></h2>
                         
                         <div class="form-group">
                             <label for="new_password" class="form-label">New Password</label>
                             <input type="password" class="form-control" id="new_password" name="new_password" 
-                                   minlength="6" placeholder="Leave blank to keep current password">
-                            <small class="form-text text-muted">Minimum 6 characters.</small>
+                                   minlength="6" autocomplete="new-password" aria-describedby="new_password_help" placeholder="Leave blank to keep current password">
+                            <small id="new_password_help" class="form-text text-muted">Minimum 6 characters.</small>
                         </div>
 
                         <div class="form-group">
                             <label for="confirm_password" class="form-label">Confirm New Password</label>
                             <input type="password" class="form-control" id="confirm_password" name="confirm_password" 
-                                   placeholder="Confirm new password">
+                                   autocomplete="new-password" placeholder="Confirm new password">
                         </div>
                     </div>
 
                     <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
-                        <button type="submit" class="btn btn-primary me-md-2">
-                            <i class="bi bi-save me-2"></i>Update Profile
+                        <button type="submit" class="btn btn-primary me-md-2" data-loading-text="Saving...">
+                            <i class="bi bi-save me-1" aria-hidden="true"></i> Update Profile
                         </button>
                         <?php if ($user['user_type'] === 'admin'): ?>
                             <a href="../admin/dashboard_admin.php" class="btn btn-secondary">
-                                <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+                                <i class="bi bi-arrow-left me-1" aria-hidden="true"></i> Back to Dashboard
                             </a>
                         <?php else: ?>
                             <a href="../shared/index.php" class="btn btn-secondary">
-                                <i class="bi bi-arrow-left me-2"></i>Back to Home
+                                <i class="bi bi-arrow-left me-1" aria-hidden="true"></i> Back to Home
                             </a>
                         <?php endif; ?>
                     </div>
@@ -364,12 +340,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <div class="back-links">
                     <a href="../authentication/logout.php">
-                        <i class="bi bi-box-arrow-right me-1"></i>Logout
+                        <i class="bi bi-box-arrow-right me-1" aria-hidden="true"></i> Logout
                     </a>
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 
     <!-- Vendor JS Files -->
     <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

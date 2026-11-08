@@ -41,152 +41,69 @@ $result = $conn->query($sql);
   <link href="../assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
   <link href="../assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
-  <!-- Main CSS File -->
+  <!-- Main & Design System CSS Files -->
+  <link href="../assets/css/design-system.css" rel="stylesheet">
   <link href="../assets/css/main.css" rel="stylesheet">
 
   <!-- Custom CSS for Products -->
   <style>
     .product-category-badge {
-      background: linear-gradient(45deg, #8B4513, #CD853F);
-      color: white;
+      background: #6b3410;
+      color: #ffffff;
       padding: 5px 12px;
       border-radius: 20px;
       font-size: 12px;
-      font-weight: 600;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      box-shadow: 0 2px 4px rgba(139, 69, 19, 0.3);
-    }
-    
-    .member-img {
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .member-img img {
-      height: 250px;
-      object-fit: cover;
-      border-radius: 10px;
-      width: 100%;
-    }
-    
-    .member-img video {
-      height: 250px;
-      object-fit: cover;
-      border-radius: 10px;
-      width: 100%;
-    }
-    
-    .video-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: opacity 0.3s ease;
-    }
-    
-    .video-overlay:hover {
-      background: rgba(0, 0, 0, 0.7);
-    }
-    
-    .video-overlay .play-btn {
-      font-size: 48px;
-      color: white;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-    }
-    
-    .video-modal {
-      display: none;
-      position: fixed;
-      z-index: 9999;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgba(0, 0, 0, 0.9);
-    }
-    
-    .video-modal-content {
-      background-color: #000;
-      margin: 5% auto;
-      padding: 0;
-      width: 90%;
-      max-width: 800px;
-      position: relative;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    
-    .video-modal video,
-    .video-modal iframe {
-      width: 100%;
-      height: 450px;
-      border: none;
-      border-radius: 10px;
-    }
-    
-    .video-close {
-      color: #aaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-      position: absolute;
-      top: 10px;
-      right: 15px;
-      z-index: 1001;
-      cursor: pointer;
-    }
-    
-    .video-close:hover {
-      color: white;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
     }
 
     .no-products {
       padding: 60px 20px;
       text-align: center;
-      background: #f8f9fa;
-      border-radius: 15px;
-      margin: 40px 0;
+      background: #ffffff;
+      border: 1px solid var(--av-border, #d5e0d8);
+      border-radius: 16px;
+      margin: 20px 0;
+      box-shadow: var(--av-shadow-sm);
     }
 
     .no-products h3 {
-      color: #8B4513;
-      margin-bottom: 20px;
+      color: #6b3410;
+      margin-bottom: 16px;
     }
   </style>
 </head>
 
 <body class="team-page">
 
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
   <header id="header" class="header d-flex align-items-center fixed-top">
     <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
 
-      <a href="index.php" class="logo d-flex align-items-center">
-        <img src="../assets/img/logo.png" alt="" style="border-radius: 50%;">
-        <h1 class="sitename">Agro Vista</h1>
+      <a href="index.php" class="logo d-flex align-items-center" aria-label="Agro Vista Home">
+        <img src="../assets/img/logo.png" alt="Agro Vista logo" width="32" height="32" style="border-radius: 50%;" onerror="this.style.display='none'">
+        <span class="sitename">Agro Vista</span>
       </a>
 
-      <nav id="navmenu" class="navmenu">
+      <nav id="navmenu" class="navmenu" aria-label="Primary navigation">
         <ul>
           <li><a href="index.php">Home</a></li>
-          <li><a href="products.php" class="active">Products</a></li>
+          <li><a href="products.php" class="active" aria-current="page">Products</a></li>
           <li><a href="ufruits.php">Underutilized Fruits</a></li>
           <li><a href="contact.php">Contact</a></li>
         </ul>
-        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+        <button type="button" class="mobile-nav-toggle d-xl-none" aria-controls="navmenu" aria-expanded="false" aria-label="Open navigation menu">
+          <i class="bi bi-list" aria-hidden="true"></i>
+        </button>
       </nav>
 
     </div>
   </header>
 
-  <main class="main">
+  <main id="main-content" class="main">
 
     <!-- Page Title -->
     <div class="page-title dark-background">
@@ -195,11 +112,11 @@ $result = $conn->query($sql);
         <p>
           Experience the traditional flavors of Sri Lanka with our authentic Kithul products. From pure kithul treacle to natural jaggery, our products are sustainably harvested from the Caryota urens palm trees using time-honored methods passed down through generations.
         </p>
-        <nav class="breadcrumbs">
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
           <ol>
             <li><a href="index.php">Home</a></li>
             <li><a href="products.php">Products</a></li>
-            <li class="current"><?php echo htmlspecialchars($page_title); ?></li>
+            <li class="current" aria-current="page"><?php echo htmlspecialchars($page_title); ?></li>
           </ol>
         </nav>
       </div>
@@ -209,11 +126,12 @@ $result = $conn->query($sql);
     <section id="products" class="team section">
 
       <div class="container">
-        <div class="row gy-5">
+        <h2 class="visually-hidden">Available <?php echo htmlspecialchars($page_title); ?></h2>
+        <div class="row gy-4">
 
           <?php
           if ($result && $result->num_rows > 0) {
-              $default_images = ['685799f1d8046.jpg', '68579a602c35c.jpg'];
+              $default_images = ['kithul.jpg'];
               $image_index = 0;
               
               while($row = $result->fetch_assoc()) {
@@ -258,51 +176,72 @@ $result = $conn->query($sql);
                       }
                   }
                   
-                  $product_id = 'product_' . $row['product_id'];
+                  $product_id = 'product_' . (int)$row['product_id'];
           ?>
           <div class="col-lg-4 col-md-6 member" data-aos="fade-up" data-aos-delay="100">
-            <div class="member-img">
-              <?php if (!empty($video_url)): ?>
-                <img src="<?php echo htmlspecialchars($display_image); ?>" class="img-fluid" alt="<?php echo htmlspecialchars($row['name']); ?>">
-                <div class="video-overlay" onclick="openVideoModal('<?php echo $product_id; ?>')">
-                  <i class="bi bi-play-circle-fill play-btn"></i>
+            <article class="member-card">
+              <div class="member-img">
+                <img src="<?php echo htmlspecialchars($display_image); ?>" class="img-fluid" alt="<?php echo htmlspecialchars($row['name'] . ' by ' . $row['seller_name']); ?>" width="400" height="250" loading="lazy" decoding="async">
+                <?php if (!empty($video_url)): ?>
+                  <button type="button" class="video-overlay" onclick="openVideoModal('<?php echo $product_id; ?>', this)" aria-label="Watch video demonstration for <?php echo htmlspecialchars($row['name']); ?>">
+                    <i class="bi bi-play-circle-fill play-btn" aria-hidden="true"></i>
+                    <span class="play-label">Watch Video</span>
+                  </button>
+                <?php endif; ?>
+                <div class="social p-2">
+                  <span class="product-category-badge"><?php echo htmlspecialchars($page_title); ?></span>
                 </div>
-              <?php else: ?>
-                <img src="<?php echo htmlspecialchars($display_image); ?>" class="img-fluid" alt="<?php echo htmlspecialchars($row['name']); ?>">
-              <?php endif; ?>
-              <div class="social">
-                <span class="product-category-badge"><?php echo htmlspecialchars($page_title); ?></span>
               </div>
-            </div>
-            <div class="member-info text-center">
-              <h4><?php echo htmlspecialchars($row['name']); ?></h4>
-              <span><?php echo htmlspecialchars($row['seller_name']); ?></span>
-              
-            </div>
+              <div class="member-info text-center">
+                <div>
+                  <h3><?php echo htmlspecialchars($row['name']); ?></h3>
+                  <p class="seller-meta mb-0">
+                    <i class="bi bi-person-check" aria-hidden="true"></i>
+                    <span>Seller: <?php echo htmlspecialchars($row['seller_name']); ?></span>
+                  </p>
+                </div>
+                <?php if (!empty($video_url)): ?>
+                  <div class="product-actions mt-3">
+                    <button type="button" onclick="openVideoModal('<?php echo $product_id; ?>', this)" class="btn btn-admin btn-sm w-100">
+                      <i class="bi bi-play-circle" aria-hidden="true"></i> Watch Video
+                    </button>
+                  </div>
+                <?php endif; ?>
+              </div>
+            </article>
             
             <?php if (!empty($video_url)): ?>
             <!-- Video Modal -->
-            <div id="<?php echo $product_id; ?>_modal" class="video-modal">
+            <div id="<?php echo $product_id; ?>_modal" class="video-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="<?php echo $product_id; ?>_title">
               <div class="video-modal-content">
-                <span class="video-close" onclick="closeVideoModal('<?php echo $product_id; ?>')">&times;</span>
+                <div class="video-modal-header">
+                  <h3 id="<?php echo $product_id; ?>_title" class="video-modal-title"><?php echo htmlspecialchars($row['name']); ?></h3>
+                  <button type="button" class="video-close" onclick="closeVideoModal('<?php echo $product_id; ?>')" aria-label="Close video modal">
+                    <i class="bi bi-x-lg" aria-hidden="true"></i>
+                  </button>
+                </div>
                 <?php if ($video_type === 'youtube'): ?>
                   <iframe id="<?php echo $product_id; ?>_iframe" src="" 
+                          title="<?php echo htmlspecialchars($row['name']); ?> video player"
                           allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                           allowfullscreen
-                          data-src="https://www.youtube.com/embed/<?php echo $video_id; ?>"></iframe>
+                          data-src="https://www.youtube.com/embed/<?php echo htmlspecialchars($video_id); ?>"></iframe>
                 <?php elseif ($video_type === 'vimeo'): ?>
                   <iframe id="<?php echo $product_id; ?>_iframe" src="" 
+                          title="<?php echo htmlspecialchars($row['name']); ?> video player"
                           allow="fullscreen; picture-in-picture" 
                           allowfullscreen
-                          data-src="https://player.vimeo.com/video/<?php echo $video_id; ?>"></iframe>
+                          data-src="https://player.vimeo.com/video/<?php echo htmlspecialchars($video_id); ?>"></iframe>
                 <?php elseif ($video_type === 'local'): ?>
                   <video id="<?php echo $product_id; ?>_video" controls muted playsinline preload="metadata">
                     <source src="<?php echo htmlspecialchars($video_url); ?>" 
-                            type="video/<?php echo pathinfo($video_url, PATHINFO_EXTENSION); ?>">
+                            type="video/<?php echo htmlspecialchars(pathinfo($video_url, PATHINFO_EXTENSION)); ?>">
                     <p>Your browser does not support the video tag. Video path: <?php echo htmlspecialchars($video_url); ?></p>
                   </video>
                 <?php else: ?>
-                  <iframe id="<?php echo $product_id; ?>_iframe" src="" allowfullscreen
+                  <iframe id="<?php echo $product_id; ?>_iframe" src=""
+                          title="<?php echo htmlspecialchars($row['name']); ?> video player"
+                          allowfullscreen
                           data-src="<?php echo htmlspecialchars($video_url); ?>"></iframe>
                 <?php endif; ?>
               </div>
@@ -314,10 +253,11 @@ $result = $conn->query($sql);
           } else {
           ?>
           <div class="col-12 text-center">
-            <div class="no-products">
+            <div class="no-products" role="status">
+              <i class="bi bi-box-seam fs-1 text-muted mb-2 d-block" aria-hidden="true"></i>
               <h3>No Kithul Products Available</h3>
               <p>We're currently updating our kithul inventory. Please check back soon for authentic kithul treacle and jaggery products!</p>
-              <a href="products.php" class="btn btn-primary mt-3">View All Products</a>
+              <a href="products.php" class="btn btn-admin mt-3">View All Product Categories</a>
             </div>
           </div>
           <?php } ?>
@@ -347,10 +287,10 @@ $result = $conn->query($sql);
         <div class="col-lg-2 col-md-3 footer-links">
           <h4>Useful Links</h4>
           <ul>
-            <li><i class="bi bi-chevron-right"></i> <a href="index.php">Home</a></li>
-            <li><i class="bi bi-chevron-right"></i> <a href="products.php">Products</a></li>
-            <li><i class="bi bi-chevron-right"></i> <a href="ufruits.php">Underutilized Fruits</a></li>
-            <li><i class="bi bi-chevron-right"></i> <a href="contact.php">Contact</a></li>
+            <li><i class="bi bi-chevron-right" aria-hidden="true"></i> <a href="index.php">Home</a></li>
+            <li><i class="bi bi-chevron-right" aria-hidden="true"></i> <a href="products.php">Products</a></li>
+            <li><i class="bi bi-chevron-right" aria-hidden="true"></i> <a href="ufruits.php">Underutilized Fruits</a></li>
+            <li><i class="bi bi-chevron-right" aria-hidden="true"></i> <a href="contact.php">Contact</a></li>
           </ul>
         </div>
 
@@ -358,10 +298,10 @@ $result = $conn->query($sql);
           <h4>Follow Us</h4>
           <p>Stay connected with us and keep up with the latest updates, news, and insights from our agricultural community.</p>
           <div class="social-links d-flex">
-            <a href=""><i class="bi bi-twitter-x"></i></a>
-            <a href=""><i class="bi bi-facebook"></i></a>
-            <a href=""><i class="bi bi-instagram"></i></a>
-            <a href=""><i class="bi bi-linkedin"></i></a>
+            <a href="#footer" aria-label="Follow Agro Vista on X (Twitter)"><i class="bi bi-twitter-x" aria-hidden="true"></i></a>
+            <a href="#footer" aria-label="Follow Agro Vista on Facebook"><i class="bi bi-facebook" aria-hidden="true"></i></a>
+            <a href="#footer" aria-label="Follow Agro Vista on Instagram"><i class="bi bi-instagram" aria-hidden="true"></i></a>
+            <a href="#footer" aria-label="Follow Agro Vista on LinkedIn"><i class="bi bi-linkedin" aria-hidden="true"></i></a>
           </div>
         </div>
 
@@ -375,10 +315,10 @@ $result = $conn->query($sql);
   </footer>
 
   <!-- Scroll Top -->
-  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center" aria-label="Scroll to top"><i class="bi bi-arrow-up-short" aria-hidden="true"></i></a>
 
   <!-- Preloader -->
-  <div id="preloader"></div>
+  <div id="preloader" aria-hidden="true"></div>
 
   <!-- Vendor JS Files -->
   <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -393,50 +333,6 @@ $result = $conn->query($sql);
 
   <!-- Main JS File -->
   <script src="../assets/js/main.js"></script>
-
-  <!-- Video Modal JavaScript -->
-  <script>
-    function openVideoModal(productId) {
-      const modal = document.getElementById(productId + '_modal');
-      modal.style.display = 'block';
-      
-      const iframe = document.getElementById(productId + '_iframe');
-      const video = document.getElementById(productId + '_video');
-      
-      if (iframe && iframe.dataset.src) {
-        iframe.src = iframe.dataset.src;
-      }
-      
-      if (video) {
-        video.play();
-      }
-    }
-
-    function closeVideoModal(productId) {
-      const modal = document.getElementById(productId + '_modal');
-      modal.style.display = 'none';
-      
-      const iframe = document.getElementById(productId + '_iframe');
-      const video = document.getElementById(productId + '_video');
-      
-      if (iframe) {
-        iframe.src = '';
-      }
-      
-      if (video) {
-        video.pause();
-        video.currentTime = 0;
-      }
-    }
-
-    // Close modal when clicking outside
-    window.onclick = function(event) {
-      if (event.target.classList.contains('video-modal')) {
-        const productId = event.target.id.replace('_modal', '');
-        closeVideoModal(productId);
-      }
-    }
-  </script>
 
 </body>
 

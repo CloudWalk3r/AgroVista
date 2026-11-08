@@ -23,104 +23,92 @@ include '../db/DBcon.php';
     <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
     <link href="../assets/vendor/aos/aos.css" rel="stylesheet">
     
-    <!-- Main CSS File -->
+    <!-- Main & Design System CSS Files -->
+    <link href="../assets/css/design-system.css" rel="stylesheet">
     <link href="../assets/css/main.css" rel="stylesheet">
     
     <!-- Custom Admin CSS -->
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background: #f8f9fa;
+            background: var(--av-bg, #f6f9f7);
         }
         
         .dashboard-container {
-            padding: 40px 0;
+            padding: 32px 0 48px 0;
         }
         
         .dashboard-card {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--av-shadow-sm);
+            border: 1px solid var(--av-border, #d5e0d8);
+            height: calc(100% - 24px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
         }
         
         .dashboard-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-3px);
+            box-shadow: var(--av-shadow-md);
         }
         
-        .dashboard-card h3 {
-            color: #2c5530;
-            margin-bottom: 20px;
-        }
-        
-        .btn-admin {
-            background: linear-gradient(135deg, #4CAF50, #45a049);
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 25px;
-            font-weight: 500;
-            text-decoration: none;
-            display: inline-block;
-            margin: 10px;
-            transition: all 0.3s;
-        }
-        
-        .btn-admin:hover {
-            background: linear-gradient(135deg, #45a049, #3d8b40);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
-            text-decoration: none;
-        }
-        
-        .btn-secondary {
-            background: linear-gradient(135deg, #6c757d, #5a6268);
-        }
-        
-        .btn-danger {
-            background: linear-gradient(135deg, #dc3545, #c82333);
+        .dashboard-card h2 {
+            color: var(--av-secondary, #1e4356);
+            font-size: var(--av-text-xl);
+            font-weight: 700;
+            margin-bottom: 12px;
         }
         
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
             gap: 20px;
             margin-bottom: 30px;
         }
         
         .stat-card {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
+            background: #ffffff;
+            padding: 24px 20px;
+            border-radius: 14px;
             text-align: center;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            box-shadow: var(--av-shadow-sm);
+            border: 1px solid var(--av-border, #d5e0d8);
         }
         
         .stat-number {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #4CAF50;
+            font-size: clamp(2rem, 1.6rem + 1.5vw, 2.75rem);
+            font-weight: 700;
+            color: var(--av-primary, #1b5e20);
+            line-height: 1.2;
         }
         
         .stat-label {
-            color: #666;
-            font-weight: 500;
+            color: var(--av-text-muted, #4a5950);
+            font-weight: 600;
+            font-size: var(--av-text-sm);
+            margin-top: 6px;
         }
         
         .welcome-banner {
-            background: linear-gradient(135deg, #4CAF50, #45a049);
-            color: white;
-            padding: 40px;
-            border-radius: 15px;
-            margin-bottom: 30px;
+            background: linear-gradient(135deg, #1b5e20, #1e4356);
+            color: #ffffff;
+            padding: 36px 28px;
+            border-radius: 16px;
+            margin-bottom: 28px;
             text-align: center;
+            box-shadow: var(--av-shadow-md);
         }
         
         .welcome-banner h1 {
-            margin-bottom: 10px;
+            color: #ffffff;
+            font-size: var(--av-text-2xl);
+            font-weight: 700;
+            margin-bottom: 8px;
         }
     </style>
 </head>
@@ -128,9 +116,16 @@ include '../db/DBcon.php';
 
     <?php include 'admin_header.php'; ?>
 
-    <main class="main">
+    <main id="main-content" class="main">
         <div class="container dashboard-container">
             
+            <?php if (isset($_GET['success']) && $_GET['success'] === 'Added_Seller'): ?>
+                <div class="alert alert-success" role="status" aria-live="polite">
+                    <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
+                    <span>Seller has been added successfully!</span>
+                </div>
+            <?php endif; ?>
+
             <!-- Welcome Banner -->
             <div class="welcome-banner" data-aos="fade-up">
                 <h1>Welcome to Admin Dashboard</h1>
@@ -138,48 +133,53 @@ include '../db/DBcon.php';
             </div>
 
             <!-- Statistics Grid -->
-            <div class="stats-grid" data-aos="fade-up" data-aos-delay="100">
-                <?php
-                // Get statistics
-                $total_products = $conn->query("SELECT COUNT(*) as count FROM products")->fetch_assoc()['count'];
-                $total_sellers = $conn->query("SELECT COUNT(*) as count FROM sellers")->fetch_assoc()['count'];
-                $utilized_products = $conn->query("SELECT COUNT(*) as count FROM products WHERE category = 'Utilized'")->fetch_assoc()['count'];
-                $underutilized_products = $conn->query("SELECT COUNT(*) as count FROM products WHERE category = 'UnderUtilized'")->fetch_assoc()['count'];
-                ?>
-                
-                <div class="stat-card">
-                    <div class="stat-number"><?php echo $total_products; ?></div>
-                    <div class="stat-label">Total Products</div>
+            <section aria-label="Platform Statistics">
+                <h2 class="visually-hidden">Platform Statistics</h2>
+                <div class="stats-grid" data-aos="fade-up" data-aos-delay="100">
+                    <?php
+                    // Get statistics
+                    $total_products = $conn->query("SELECT COUNT(*) as count FROM products")->fetch_assoc()['count'];
+                    $total_sellers = $conn->query("SELECT COUNT(*) as count FROM sellers")->fetch_assoc()['count'];
+                    $utilized_products = $conn->query("SELECT COUNT(*) as count FROM products WHERE category = 'Utilized'")->fetch_assoc()['count'];
+                    $underutilized_products = $conn->query("SELECT COUNT(*) as count FROM products WHERE category = 'UnderUtilized'")->fetch_assoc()['count'];
+                    ?>
+                    
+                    <div class="stat-card">
+                        <div class="stat-number"><?php echo (int)$total_products; ?></div>
+                        <div class="stat-label">Total Products</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-number"><?php echo (int)$total_sellers; ?></div>
+                        <div class="stat-label">Total Sellers</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-number"><?php echo (int)$utilized_products; ?></div>
+                        <div class="stat-label">Utilized Products</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-number"><?php echo (int)$underutilized_products; ?></div>
+                        <div class="stat-label">UnderUtilized Fruits</div>
+                    </div>
                 </div>
-                
-                <div class="stat-card">
-                    <div class="stat-number"><?php echo $total_sellers; ?></div>
-                    <div class="stat-label">Total Sellers</div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-number"><?php echo $utilized_products; ?></div>
-                    <div class="stat-label">Utilized Products</div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-number"><?php echo $underutilized_products; ?></div>
-                    <div class="stat-label">UnderUtilized Fruits</div>
-                </div>
-            </div>
+            </section>
 
             <!-- Action Cards -->
-            <div class="row" data-aos="fade-up" data-aos-delay="200">
+            <div class="row g-4 mb-2" data-aos="fade-up" data-aos-delay="200">
                 <div class="col-lg-6">
                     <div class="dashboard-card">
-                        <h3><i class="bi bi-box-seam"></i> Product Management</h3>
-                        <p>Manage all products including both utilized and underutilized categories.</p>
-                        <div class="mt-3">
+                        <div>
+                            <h2><i class="bi bi-box-seam me-2 text-success" aria-hidden="true"></i>Product Management</h2>
+                            <p class="text-muted">Manage all products including both utilized and underutilized categories.</p>
+                        </div>
+                        <div class="d-flex flex-wrap gap-2 mt-3">
                             <a href="view_products.php" class="btn-admin">
-                                <i class="bi bi-eye"></i> View All Products
+                                <i class="bi bi-eye" aria-hidden="true"></i> View All Products
                             </a>
                             <a href="add_product.php" class="btn-admin">
-                                <i class="bi bi-plus-circle"></i> Add New Product
+                                <i class="bi bi-plus-circle" aria-hidden="true"></i> Add New Product
                             </a>
                         </div>
                     </div>
@@ -187,14 +187,16 @@ include '../db/DBcon.php';
                 
                 <div class="col-lg-6">
                     <div class="dashboard-card">
-                        <h3><i class="bi bi-people"></i> Seller Management</h3>
-                        <p>Manage seller accounts and their information.</p>
-                        <div class="mt-3">
+                        <div>
+                            <h2><i class="bi bi-people me-2 text-success" aria-hidden="true"></i>Seller Management</h2>
+                            <p class="text-muted">Manage seller accounts and their contact information.</p>
+                        </div>
+                        <div class="d-flex flex-wrap gap-2 mt-3">
                             <a href="view_sellers.php" class="btn-admin">
-                                <i class="bi bi-eye"></i> View All Sellers
+                                <i class="bi bi-eye" aria-hidden="true"></i> View All Sellers
                             </a>
                             <a href="add_seller.php" class="btn-admin">
-                                <i class="bi bi-person-plus"></i> Add New Seller
+                                <i class="bi bi-person-plus" aria-hidden="true"></i> Add New Seller
                             </a>
                         </div>
                     </div>
@@ -202,22 +204,22 @@ include '../db/DBcon.php';
             </div>
 
             <!-- Quick Actions -->
-            <div class="dashboard-card" data-aos="fade-up" data-aos-delay="300">
-                <h3><i class="bi bi-lightning"></i> Quick Actions</h3>
-                <div class="row center">
-                    <div class="col-md-3">
+            <div class="dashboard-card mt-3" data-aos="fade-up" data-aos-delay="300">
+                <h2><i class="bi bi-lightning me-2 text-success" aria-hidden="true"></i>Quick Actions</h2>
+                <div class="row g-3 mt-1">
+                    <div class="col-sm-6 col-md-4">
                         <a href="../shared/index.php" class="btn-admin w-100">
-                            <i class="bi bi-house"></i> View Frontend
+                            <i class="bi bi-house" aria-hidden="true"></i> View Frontend
                         </a>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-sm-6 col-md-4">
                         <a href="../shared/edit_profile.php" class="btn-admin btn-secondary w-100">
-                            <i class="bi bi-person-gear"></i> Edit Profile
+                            <i class="bi bi-person-gear" aria-hidden="true"></i> Edit Profile
                         </a>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-sm-12 col-md-4">
                         <a href="../authentication/logout.php" class="btn-admin btn-danger w-100">
-                            <i class="bi bi-box-arrow-right"></i> Logout
+                            <i class="bi bi-box-arrow-right" aria-hidden="true"></i> Logout
                         </a>
                     </div>
                 </div>
@@ -232,14 +234,6 @@ include '../db/DBcon.php';
     
     <!-- Main JS File -->
     <script src="../assets/js/main.js"></script>
-    
-    <script>
-        // Initialize AOS
-        AOS.init({
-            duration: 800,
-            easing: 'slide'
-        });
-    </script>
 
 </body>
 </html>
